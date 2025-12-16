@@ -12,9 +12,60 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const generateImage = () => {};
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true);
+        const response = await fetch("http://localhost:8080/api/v1/dalle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+        const data = await response.json();
 
-  const handleSubmit = () => {};
+        if (data.error) {
+          alert("Server error: " + data.error);
+          return;
+        }
+
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (error) {
+        alert("Network or frontend error: " + error);
+      } finally {
+        setGeneratingImg(false);
+      }
+    } else {
+      alert("Please enter a prompt");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.prompt && form.photo) {
+      try {
+        setLoading(true);
+        const response = await fetch("http://localhost:8080/api/v1/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        });
+
+        await response.json();
+        navigate("/");
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert("Please enter a prompt and generate a image");
+    }
+  };
 
   const handleChange = (e) => {
     //Changing the property name of the form to the value that user writes
@@ -81,30 +132,31 @@ const CreatePost = () => {
             )}
           </div>
         </div>
+
+        <div className="mt-5 flex gap-5">
+          <button
+            type="button"
+            onClick={generateImage}
+            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto 
+          px-5 py-2.5 text-center cursor-pointer"
+          >
+            {generatingImg ? "Generating..." : "Generate"}
+          </button>
+        </div>
+        <div className="mt-10">
+          <p className="mt-2 text-[#666e75] text-[14px]">
+            Once you have created the image you want, you can share it with
+            others in the community
+          </p>
+          <button
+            type="submit"
+            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md
+          text-sm w-full sm:w-auto px-5 py-2.5 text-center cursor-pointer"
+          >
+            {loading ? "Sharing..." : "Share with the community"}
+          </button>
+        </div>
       </form>
-      <div className="mt-5 flex gap-5">
-        <button
-          type="button"
-          onClick={generateImage}
-          className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto 
-          px-5 py-2.5 text-center"
-        >
-          {generatingImg ? "Generating..." : "Generate"}
-        </button>
-      </div>
-      <div className="mt-10">
-        <p className="mt-2 text-[#666e75] text-[14px]">
-          Once you have created the image you want, you can share it with others
-          in he community
-        </p>
-        <button
-          type="submit"
-          className="mt-3 text-white bg-[#6469ff] font-medium rounded-md
-        text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-        >
-          {loading ? "Sharing..." : "Share with the community"}
-        </button>
-      </div>
     </section>
   );
 };
