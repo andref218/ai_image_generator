@@ -1,3 +1,4 @@
-# AI Image Generator
+# Client - AI Image Generator Frontend
 
-An application to generate stunning images from text prompts using artificial intelligence.
+This folder contains the **frontend** of the AI Image Generator project.  
+It is built with **React.js** and **Tailwind CSS**.
