@@ -3,6 +3,23 @@
 This project is an **AI-powered image generation platform** developed as a learning project using the MERN stack.  
 It allows users to **create images using AI**, share them with the community, download them and browse all user-generated images.
 
+## 🖼️ Screenshots / Demo
+
+### Home Screen
+
+![Home Screen](./screenshots/aiImageGenerator1.png)
+
+### Create AI Image Screen
+
+![Create AI Image Screen](./screenshots/aiImageGenerator2.png)
+![Home Screen](./screenshots/aiImageGenerator3.png)
+
+### Search Screen
+
+![Home Screen](./screenshots/aiImageGenerator4.png)
+
+---
+
 ## 🎯 Project Objectives
 
 The main goals of this project are to:
